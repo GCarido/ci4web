@@ -89,7 +89,6 @@ class AccountController extends BaseController
     {
         $accountModel = new AccountModel();
         $account = $accountModel->where('token', $id)->first();
-
         $session = session();
 
         if ($account) {
@@ -101,8 +100,10 @@ class AccountController extends BaseController
             $accountModel->set($data)->where('token', $id)->update();
 
             $session->setFlashdata('msg', 'Your account was verified!');
+            $session->setFlashdata('msg_type', 'success');
         } else {
             $session->setFlashdata('msg', 'Invalid link or it expired already.');
+            $session->setFlashdata('msg_type', 'danger');
         }
 
         return redirect('signin');
@@ -111,5 +112,46 @@ class AccountController extends BaseController
     public function signin()
     {
         return view('signin');
+    }
+
+    public function auth()
+    {
+        $session = session();
+
+        $accountModel = new AccountModel();
+
+        $email = $this->request->getVar('email');
+
+        $password = $this->request->getVar('password');
+
+        $account = $accountModel->where('email', $email)->first();
+
+        if ($account) { // Check if email exists
+            $pass = $account['password'];
+            $authPassword = password_verify($password, $pass);
+
+            if ($authPassword) { // Check if password is correct
+                if ($account['status'] === 'active') {
+                    $session_data = [
+                        'id' => $account['id'],
+                        'name' => $account['name'],
+                        'email' => $account['email'],
+                        'isLoggedIn' => TRUE
+                    ];
+
+                    $session->set($session_data);
+                    return redirect()->to('home');
+                } else {
+                    $session->setFlashdata('msg', 'Account was not verified');
+                    return redirect('signin');
+                }
+            } else {
+                $session->setFlashdata('msg', 'Invalid Email or Password');
+                return redirect('signin');
+            } 
+        } else {
+            $session->setFlashdata('msg', 'Account does not Exist');
+            return redirect('signin');
+        }
     }
 }
