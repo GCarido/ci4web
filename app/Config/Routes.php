@@ -17,3 +17,10 @@ $routes->get('/product', 'Home::product');
 $routes->get('/edit/(:any)', 'Home::edit/$1');
 
 $routes->post('/update', 'Home::update');
+
+$routes->match(['get', 'post'], '/mail', 'Home::mail');
+
+
+$routes->setAutoRoute(true);
+
+
