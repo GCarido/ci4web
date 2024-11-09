@@ -20,6 +20,8 @@ $routes->post('/update', 'Home::update');
 
 $routes->match(['get', 'post'], '/register', 'AccountController::register');
 $routes->match(['get', 'post'], '/store', 'AccountController::store');
+$routes->match(['get', 'post'], '/signin', 'AccountController::signin');
+$routes->match(['get', 'post'], '/verify/(:any)', 'AccountController::verify/$1');
 
 
 $routes->setAutoRoute(true);
