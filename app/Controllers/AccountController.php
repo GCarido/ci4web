@@ -20,7 +20,10 @@ class AccountController extends BaseController
         $to = $to;
         $subject = $subject;
         $message = $message;
+        // $headers = 'MIME-Version:1.0'. "\r\n";
+        // $headers = 'Content-type: text/html; charset=iso8859-1'. "\r\n";
         $email = \Config\Services::email();
+        $email->setMailType("html"); // Make styling and html tags work
         $email->setTo($to);
         $email->setFrom(
             'geraldcastcarido@gmail.com',
@@ -71,7 +74,7 @@ class AccountController extends BaseController
             $accountModel->save($data);
 
             $subject = "Confirm your registration";
-            $message = "Hello {$name}! Welcome to the website. To continue, please confirm your account by clicking this <a href='/verify/{$token}'>link</a>";
+            $message = "Hello {$name}! Welcome to the website. To continue, please confirm your account by clicking this <a href='" . base_url() . "/verify/{$token}'>Link</a>";
 
             $this->sendMail($to, $subject, $message);
 
