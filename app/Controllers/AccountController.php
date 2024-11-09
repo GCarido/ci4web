@@ -15,11 +15,11 @@ class AccountController extends BaseController
     }
 
 
-    public function sendMail()
+    public function sendMail($to, $subject, $message)
     {
-        $to = 'erningcards@gmail.com';
-        $subject = 'Test Email PHP';
-        $message = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eum, accusamus temporibus illum vel sint non. Mollitia tempore dignissimos ut perferendis sint? Autem minus culpa assumenda ipsa quos veniam distinctio facilis!';
+        $to = $to;
+        $subject = $subject;
+        $message = $message;
         $email = \Config\Services::email();
         $email->setTo($to);
         $email->setFrom(
@@ -48,22 +48,32 @@ class AccountController extends BaseController
         helper(['form']);
         $rules = [
             'name'  => 'required|min_length[5]|max_length[50]',
-            'email' => 'required|min_length[20]|max_length[100]|valid_email|is_unique[accounts.email]',
+            'email' => 'required|min_length[10]|max_length[100]|valid_email|is_unique[accounts.email]',
             'password' => 'required|min_length[8]|max_length[50]',
             'confirmpassword' => 'matches[password]'
         ];
 
         if($this->validate($rules)){
             $accountModel = new AccountModel();
+            $token = $this->token(100);
+            $to = $this->request->getVar('email');
+            $name = $this->request->getVar('name');
+
             $data = [
-                'name' => $this->request->getVar('name'),
-                'email' => $this->request->getVar('email'),
+                'name' => $name,
+                'email' => $to,
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-                'token' => $this->token(100),
-                'type' => 'client'
+                'token' => $token,
+                'type' => 'client',
+                'status' => 'inactive'
             ];
 
             $accountModel->save($data);
+
+            $subject = "Confirm your registration";
+            $message = "Hello {$name}! Welcome to the website. To continue, please confirm your account by clicking this <a href='/verify/{$token}'>link</a>";
+
+            $this->sendMail($to, $subject, $message);
 
             return redirect('/signin');
         } else{
