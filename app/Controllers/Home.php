@@ -40,4 +40,35 @@ class Home extends BaseController
 
         return view('product_edit', $data);
     }
+
+    public function update()
+    {
+        // $name = $this->request->getVar('name');
+        // $description = $this->request->getVar('description');
+        // $quantity = $this->request->getVar('quantity');
+        // $price = $this->request->getVar('price');
+        // $status = $this->request->getVar('status');
+        // $product_id = $this->request->getVar('product_id');
+
+        // $data = [
+        //     'name' => $name,
+        //     'description' => $description,
+        //     'quantity' => $quantity,
+        //     'price' => $price,
+        //     'status' => $status
+        // ];
+
+
+        // SHORT METHOD
+
+        $data = $this->request->getVar([
+            'name',
+            'description',
+            'quantity',
+            'price',
+            'status'
+        ]);
+
+        print_r($data);
+    }
 }
