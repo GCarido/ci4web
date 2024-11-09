@@ -59,8 +59,11 @@ class Home extends BaseController
         // ];
 
 
-        // SHORT METHOD
+        $product_id = $this->request->getVar('product_id');
 
+        $p = new ProductModel();
+
+        // SHORT METHOD
         $data = $this->request->getVar([
             'name',
             'description',
@@ -69,6 +72,12 @@ class Home extends BaseController
             'status'
         ]);
 
-        print_r($data);
+        $p->set($data)->where('product_id', $product_id)->update();
+
+        $session = session();
+
+        $session->setFlashdata('msg', 'Product was updated successfully.');
+
+        return redirect()->to('/product'); // Redirect
     }
 }
