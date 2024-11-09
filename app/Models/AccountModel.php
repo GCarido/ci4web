@@ -12,6 +12,7 @@ class AccountModel extends Model
         'email',
         'password',
         'token',
-        'type'
+        'type',
+        'status'
     ];
 }
