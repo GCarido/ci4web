@@ -5,7 +5,7 @@ use App\Models\ProductModel;
 
 class Home extends BaseController
 {
-    public function index(): string
+    public function index()
     {
         return view('welcome_message');
     }
@@ -76,7 +76,7 @@ class Home extends BaseController
 
         $session = session();
 
-        $session->setFlashdata('msg', 'Product was updated successfully.');
+        $session->setFlashdata('msg', 'Product was updated successfully.'); // Flash a message
 
         return redirect()->to('/product'); // Redirect
     }
