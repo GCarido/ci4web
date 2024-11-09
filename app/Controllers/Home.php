@@ -102,8 +102,4 @@ class Home extends BaseController
         }
     }
 
-    public function mail()
-    {
-        $this->sendMail();
-    }
 }
