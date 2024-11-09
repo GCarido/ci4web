@@ -18,7 +18,8 @@ $routes->get('/edit/(:any)', 'Home::edit/$1');
 
 $routes->post('/update', 'Home::update');
 
-$routes->match(['get', 'post'], '/mail', 'Home::mail');
+$routes->match(['get', 'post'], '/register', 'AccountController::register');
+$routes->match(['get', 'post'], '/store', 'AccountController::store');
 
 
 $routes->setAutoRoute(true);
